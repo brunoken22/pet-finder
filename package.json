@@ -3,20 +3,44 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev:back": "nodemon --watch ./be-src/index.ts --exec ts-node ./be-src/index.ts",
+    "dev": "parcel serve ./fe-src/index.html",
+    "sync": "ts-node ./be-src/sync.ts"
+  },
   "dependencies": {
     "@cloudinary/url-gen": "^1.10.0",
+    "@mapbox/mapbox-gl-geocoder": "^5.0.1",
+    "@parcel/core": "^2.8.3",
+    "@parcel/package-manager": "^2.8.3",
+    "@parcel/resolver-default": "^2.8.3",
     "@types/dropzone": "^5.7.4",
     "@types/node": "^18.16.1",
+    "@vaadin/router": "^1.7.4",
+    "algoliasearch": "^4.17.0",
     "cloudinary": "^1.36.2",
     "cors": "^2.8.5",
-    "@vaadin/router": "^1.7.4",
     "dotenv": "^16.0.3",
     "dropzone": "^6.0.0-beta.2",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mapbox": "^1.0.0-beta10",
+    "mapbox-gl": "^2.14.1",
     "nodemon": "^2.0.22",
     "parcel": "^2.8.3",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.31.0"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "2.8.3",
+    "assert": "^2.0.0",
+    "buffer": "^5.5.0",
+    "console-browserify": "^1.2.0",
+    "process": "^0.11.10",
+    "punycode": "^1.4.1",
+    "querystring-es3": "^0.2.1",
+    "url": "^0.11.0",
+    "util": "^0.12.3"
   }
 }
