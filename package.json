@@ -36,6 +36,7 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.31.0",
     "typescript": "^5.0.4"
+    
   },
   "devDependencies": {
     "@parcel/transformer-sass": "2.8.3",
