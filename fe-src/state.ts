@@ -1,4 +1,4 @@
-const Api_url = "http://localhost:3000";
+const Api_url = process.env.API_URL;
 const state = {
    data: {
       fullName: "",
