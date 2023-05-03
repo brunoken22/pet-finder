@@ -1,4 +1,4 @@
-import Dropzone from "dropzone";
+import * as Dropzone from "dropzone";
 
 export function initDropzone(buttonEl) {
    return new Dropzone(buttonEl, {

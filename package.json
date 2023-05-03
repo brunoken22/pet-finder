@@ -2,15 +2,7 @@
   "name": "pet-finder",
   "version": "1.0.0",
   "license": "MIT",
-  "scripts": {
-    "dev:back": "nodemon --watch ./be-src/index.ts --exec ts-node ./be-src/index.ts",
-    "dev": "parcel serve ./fe-src/index.html",
-    "sync": "ts-node ./be-src/sync.ts",
-    "build:front": "parcel build ./fe-src/index.html",
-    "build:back": "tsc",
-    "build": "yarn build:back && yarn build:front",
-    "start": "node ./be-dist/index.js"
-  },
+
   "dependencies": {
     "@cloudinary/url-gen": "^1.10.0",
     "@mapbox/mapbox-gl-geocoder": "^5.0.1",
@@ -48,5 +40,14 @@
     "querystring-es3": "^0.2.1",
     "url": "^0.11.0",
     "util": "^0.12.3"
+  }, 
+   "scripts": {
+    "dev:back": "nodemon --watch ./be-src/index.ts --exec ts-node ./be-src/index.ts",
+    "dev": "parcel serve ./fe-src/index.html",
+    "sync": "ts-node ./be-src/sync.ts",
+    "build:front": "parcel build ./fe-src/index.html",
+    "build:back": "tsc ",
+    "build": "npm run build:back && npm run build:front",
+    "start": "node ./be-dist/index.js"
   }
 }

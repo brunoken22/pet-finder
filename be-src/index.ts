@@ -216,7 +216,7 @@ app.get("/pet-cerca-de", async (req, res) => {
 });
 app.use(express.static(ruta));
 app.get("*", function (req, res) {
-   res.sendFile(ruta + "./index.html");
+   res.sendFile(ruta + "/index.html");
 });
 app.listen(port, () => {
    console.log("http://localhost:" + port);
