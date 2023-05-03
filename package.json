@@ -6,7 +6,11 @@
   "scripts": {
     "dev:back": "nodemon --watch ./be-src/index.ts --exec ts-node ./be-src/index.ts",
     "dev": "parcel serve ./fe-src/index.html",
-    "sync": "ts-node ./be-src/sync.ts"
+    "sync": "ts-node ./be-src/sync.ts",
+    "build:front": "parcel build ./fe-src/index.html",
+    "build:back": "tsc ",
+    "build": "yarn build:front && yarn build:back",
+    "start": "node ./be-src/index.js"
   },
   "dependencies": {
     "@cloudinary/url-gen": "^1.10.0",
