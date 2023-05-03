@@ -7,13 +7,14 @@
     "dev": "parcel serve ./fe-src/index.html",
     "sync": "ts-node ./be-src/sync.ts",
     "build:front": "parcel build ./fe-src/index.html",
-    "build:back": "tsc ",
-    "build": "yarn build:front && yarn build:back",
-    "start": "node ./be-src/index.js"
+    "build:back": "tsc",
+    "build": "yarn build:back && yarn build:front",
+    "start": "node ./be-dist/index.js"
   },
   "dependencies": {
     "@cloudinary/url-gen": "^1.10.0",
     "@mapbox/mapbox-gl-geocoder": "^5.0.1",
+    "@parcel/compressor-raw": "^2.8.3",
     "@parcel/core": "^2.8.3",
     "@parcel/package-manager": "^2.8.3",
     "@parcel/resolver-default": "^2.8.3",
