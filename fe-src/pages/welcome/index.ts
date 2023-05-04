@@ -4,16 +4,13 @@ let img = require("../../img/refer.png");
 export class Welcome extends HTMLElement {
    async connectedCallback() {
       await state.init();
-      const ubi = localStorage.getItem("ubi") as any;
-      if (ubi) {
-         const dataUbi = JSON.parse(ubi);
-         if (dataUbi[0]) {
+      this.render();
+      if (state.ubi[0]) {
+         setTimeout(() => {
             Router.go("/pets");
-            return;
-         }
+         }, 50);
       }
 
-      this.render();
       const ubication = this.querySelector(".ubication") as HTMLInputElement;
 
       ubication.addEventListener("click", (e) => {
@@ -24,8 +21,8 @@ export class Welcome extends HTMLElement {
       function succes(position) {
          const lat = position.coords.latitude;
          const lng = position.coords.longitude;
-         state.ubi.push(lat);
-         state.ubi.push(lng);
+         state.ubi = [lat, lng];
+
          localStorage.setItem("ubi", JSON.stringify(state.ubi));
          Router.go("/pets");
       }

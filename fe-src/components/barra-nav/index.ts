@@ -23,7 +23,7 @@ class Barra extends HTMLElement {
          cerrar.style.display = "none";
 
          location.reload();
-         Router.go("/welcome");
+         Router.go("/login");
       });
       const navbarBurgers = this.shadowRoot!.querySelector(
          ".navbar-burger"
@@ -60,7 +60,7 @@ class Barra extends HTMLElement {
          Router.go("/newReport");
       });
       (this.shadowRoot as any)
-         .querySelector(".navbar-item")
+         .querySelector(".inicio")
          .addEventListener("click", (e) => {
             Router.go("/welcome");
          });
@@ -72,7 +72,7 @@ class Barra extends HTMLElement {
       div.innerHTML = `
       <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
          <div class="navbar-brand">
-            <a class="navbar-item" href="#">
+            <a class="inicio navbar-item" href="#">
                <img src="${logo}" height="28">
             </a>
          

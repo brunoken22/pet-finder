@@ -24,7 +24,6 @@ const state = {
                },
             });
             const res = await respuesta.json();
-            console.log(res.user);
 
             const mod = {
                fullName: res.user.fullName,
@@ -36,6 +35,12 @@ const state = {
             this.setState(res.pet);
             this.setState(mod);
          }
+      }
+      const ubi: any = localStorage.getItem("ubi");
+      console.log(ubi);
+
+      if (JSON.parse(ubi)) {
+         state.ubi = JSON.parse(ubi);
       }
    },
    cerrarSesion() {
