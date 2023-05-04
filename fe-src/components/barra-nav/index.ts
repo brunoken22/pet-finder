@@ -6,8 +6,8 @@ class Barra extends HTMLElement {
       this.render();
       const cs = state.getState();
 
-      const btns = this.shadowRoot.querySelector(".navbar-end") as HTMLElement;
-      const cerrar = this.shadowRoot.querySelector(".cerrar") as HTMLElement;
+      const btns = this.shadowRoot!.querySelector(".navbar-end") as HTMLElement;
+      const cerrar = this.shadowRoot!.querySelector(".cerrar") as HTMLElement;
 
       if (cs.fullName) {
          btns.style.display = "none";
@@ -16,29 +16,26 @@ class Barra extends HTMLElement {
          btns.style.display = "block";
          cerrar.style.display = "none";
       }
-      const btnCerrar = this.shadowRoot.querySelector(".btn-cerrar");
-      btnCerrar.addEventListener("click", (e) => {
+      const btnCerrar = this.shadowRoot!.querySelector(".btn-cerrar");
+      btnCerrar!.addEventListener("click", (e) => {
          state.cerrarSesion();
-         if (
-            location.href === "http://localhost:1234/welcome" ||
-            location.href === "http://localhost:1234/"
-         ) {
-            location.reload();
-            return;
-         }
+         btns.style.display = "block";
+         cerrar.style.display = "none";
+
+         location.reload();
          Router.go("/welcome");
       });
-      const navbarBurgers = this.shadowRoot.querySelector(
+      const navbarBurgers = this.shadowRoot!.querySelector(
          ".navbar-burger"
       ) as any;
       navbarBurgers.addEventListener("click", () => {
-         const target = this.shadowRoot.querySelector(".navbar-menu");
+         const target = this.shadowRoot!.querySelector(".navbar-menu");
 
          navbarBurgers.classList.toggle("is-active");
-         target.classList.toggle("is-active");
+         target!.classList.toggle("is-active");
       });
-      const singup = this.shadowRoot.querySelector(".singup") as HTMLElement;
-      const login = this.shadowRoot.querySelector(".login") as HTMLElement;
+      const singup = this.shadowRoot!.querySelector(".singup") as HTMLElement;
+      const login = this.shadowRoot!.querySelector(".login") as HTMLElement;
 
       singup.addEventListener("click", (e) => {
          Router.go("/singup");
@@ -46,11 +43,11 @@ class Barra extends HTMLElement {
       login.addEventListener("click", (e) => {
          Router.go("/login");
       });
-      const datos = this.shadowRoot.querySelector(".datos") as HTMLElement;
-      const reportes = this.shadowRoot.querySelector(
+      const datos = this.shadowRoot!.querySelector(".datos") as HTMLElement;
+      const reportes = this.shadowRoot!.querySelector(
          ".reportes"
       ) as HTMLElement;
-      const reportar = this.shadowRoot.querySelector(
+      const reportar = this.shadowRoot!.querySelector(
          ".reportar"
       ) as HTMLElement;
       datos.addEventListener("click", (e) => {
@@ -62,7 +59,7 @@ class Barra extends HTMLElement {
       reportar.addEventListener("click", (e) => {
          Router.go("/newReport");
       });
-      this.shadowRoot
+      (this.shadowRoot as any)
          .querySelector(".navbar-item")
          .addEventListener("click", (e) => {
             Router.go("/welcome");
@@ -125,6 +122,7 @@ class Barra extends HTMLElement {
       @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";  
         body{
         } 
+
         .navbar{
             background-color:#000;
          } 

@@ -1,7 +1,9 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
 export class Datos extends HTMLElement {
-   connectedCallback() {
+   async connectedCallback() {
+      await state.init();
+
       this.render();
       const cs = state.getState();
       const comprobar = this.querySelector(".com") as HTMLElement;

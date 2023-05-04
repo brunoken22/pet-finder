@@ -5,12 +5,10 @@ import { index } from "../lib/algolia";
 const secrect = process.env.SECRECT;
 
 export async function createPet(id, data) {
-   console.log(data.img);
-
    const pet = await Pet.create({
       name: data.name,
-      lugar: data.lugar,
       img: data.img,
+      lugar: data.lugar,
       lat: data.lat,
       lng: data.lng,
       UserId: id,
@@ -19,6 +17,7 @@ export async function createPet(id, data) {
    const algoliaRes = await index.saveObject({
       objectID: pet.get("id"),
       name: pet.dataValues.name,
+      email: data.email,
       lugar: pet.dataValues.lugar,
       img: pet.dataValues.img,
       _geoloc: {
@@ -91,9 +90,14 @@ export async function getAllPets() {
    return pet;
 }
 export async function getAllPetCerca(lat, lng) {
-   const { hits } = await index.search("", {
-      aroundLatLng: [lat, lng].join(","),
-      aroundRadius: 5000,
-   });
-   return hits;
+   try {
+      const hits = await index.search("", {
+         aroundLatLng: [lat, lng].join(","),
+         aroundRadius: 10000,
+      });
+
+      return hits;
+   } catch (e) {
+      console.log(e);
+   }
 }

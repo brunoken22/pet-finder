@@ -25,20 +25,17 @@ import {
    getAllPetCerca,
 } from "./controllers/pet-controllers";
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json({ limit: "50mb" }));
 app.use(cors());
-
 const secrect = process.env.SECRECT;
 const ruta = path.resolve(__dirname, "../dist");
 
 app.get("/test", (req, res) => {
-   console.log(process.env.PORT);
-
    res.json({
-      enviroment: process.env.NODE_ENV,
+      // enviroment: process.env.NODE_ENV,
    });
 });
 
@@ -79,21 +76,18 @@ app.get("/user/:id", async (req, res) => {
 // signin
 app.post("/auth/token", async (req, res) => {
    const auth = await singin(req.body);
-
-   try {
-      if (auth) {
-         const token = jwt.sign({ id: auth.get("UserId") }, secrect);
-         res.json({
-            token,
-            auth,
-            message: "Ingresastes",
-         });
-         return auth;
-      }
-   } catch (e) {
-      res.status(400).json({
-         message: "Contraseña Incorrecta o ususario incorrecto",
+   if (auth) {
+      const token = jwt.sign({ id: auth.get("UserId") }, secrect);
+      res.json({
+         token,
+         auth,
+         message: "Ingresastes",
       });
+      return auth;
+   } else {
+      console.log("inco");
+
+      res.json({ message: "Incorreto" });
    }
 });
 // async function authMiddleeware(req, res, next) {
@@ -213,9 +207,11 @@ app.get("/pets", async (req, res) => {
 
 app.get("/pet-cerca-de", async (req, res) => {
    const { lat, lng } = req.query;
-   const respuesta = await getAllPetCerca(lat, lng);
+
+   const respuesta: any = await getAllPetCerca(lat, lng);
    res.json([respuesta]);
 });
+
 app.use(express.static(ruta));
 app.get("*", function (req, res) {
    res.sendFile(ruta + "/index.html");

@@ -1,74 +1,126 @@
-import { log } from "console";
 import { state } from "../../state";
+import { Router } from "@vaadin/router";
+import { sendSmtpEmail, apiInstance } from "../../lib/sendinblue";
 
 export class Pets extends HTMLElement {
-   connectedCallback() {
+   async connectedCallback() {
+      await state.init();
+
       this.render();
-      setTimeout(async () => {
-         if (!state.ubi[0]) {
-            return;
+      const ubi = localStorage.getItem("ubi") as any;
+      const dataUbi = JSON.parse(ubi);
+      if (!dataUbi[0]) {
+         Router.go("/welcome");
+         return;
+      }
+      await state.getPetCerca(dataUbi[0], dataUbi[1]);
+
+      const template = this.querySelector("#template") as HTMLTemplateElement;
+      const petContainer = this.querySelector(".pets-cerca")!;
+
+      for (let el of state.petsCerca) {
+         const comprobar = this.querySelector(".com") as HTMLElement;
+         if (!el) {
+            comprobar.style.display = "flex";
          }
-         await state.getPetCerca(state.ubi[0], state.ubi[1]);
-         const template = this.querySelector(
-            "#template"
-         ) as HTMLTemplateElement;
-         const petContainer = this.querySelector(".pets-cerca");
-         for (let el of state.petsCerca) {
-            const img = template.content.querySelector(
-               ".img"
-            ) as HTMLImageElement;
-            const nombre = template.content
-               .querySelector(".card-body")
-               .querySelector(".nombre");
+         comprobar.style.display = "none";
 
-            const lugar = template.content
-               .querySelector(".card-body")
-               .querySelector(".lugar");
+         const img = template.content.querySelector(".img") as HTMLImageElement;
+         const nombre = template.content
+            .querySelector(".card-body")!
+            .querySelector(".nombre") as HTMLElement;
 
-            nombre.textContent = el.name;
-            lugar.textContent = el.lugar;
-            img.src = el.img;
-            const btn = template.content.querySelectorAll(".reportar");
-            for (let els of btn) {
-               els.setAttribute("id", el.objectID);
-            }
-            let clone = document.importNode(template.content, true);
-            petContainer.appendChild(clone);
+         const lugar = template.content
+            .querySelector(".card-body")!
+            .querySelector(".lugar") as HTMLElement;
+
+         nombre.textContent = (el as any).name;
+         lugar.textContent = (el as any).lugar;
+         img.src = (el as any).img;
+         const btn = template.content.querySelectorAll(".reportar");
+         for (let els of btn) {
+            els.setAttribute("id", (el as any).objectID);
          }
-         const reports = this.querySelectorAll(".reportar");
+         let clone = document.importNode(template.content, true);
+         petContainer.appendChild(clone);
+      }
+      const reports = this.querySelectorAll(".reportar");
 
-         for (let el of reports) {
-            el.addEventListener("click", (e: any) => {
-               const form = this.querySelector(".pets-form") as any;
-               const h2 = this.querySelector(".h2") as any;
-               const pet = state.petsCerca.find(
-                  (el) => el.objectID == e.target.getAttribute("id")
-               );
+      for (let link of reports) {
+         link.addEventListener("click", (e: any) => {
+            e.preventDefault();
+            const form = this.querySelector(".pets-form") as any;
 
-               h2.textContent = "Reportar info de " + pet.name;
-               const nav = this.querySelector(".navs") as HTMLElement;
-               const container = this.querySelector(
-                  ".container"
-               ) as HTMLElement;
-               const x = this.querySelector(
-                  ".pets-form-complet"
-               ) as HTMLElement;
-               x.style.display = "block";
-               x.style.position = "absolute";
-               form.style.display = "block";
-               nav.style.opacity = "0.3";
-               container.style.opacity = "0.3";
-               const close = this.querySelector(".btn-close") as HTMLElement;
-               close.addEventListener("click", () => {
-                  x.style.display = "none";
-                  x.style.position = "unset";
-                  form.style.display = "none";
-                  nav.style.opacity = "1";
-                  container.style.opacity = "1";
-               });
+            const h2 = this.querySelector(".h2") as any;
+
+            const pet = state.petsCerca.find(
+               (el) => (el as any).objectID == e.target.getAttribute("id")
+            );
+
+            h2.textContent = "Reportar info de " + (pet as any).name;
+
+            const nav = this.querySelector(".navs") as HTMLElement;
+            const container = this.querySelector(".container") as HTMLElement;
+            const x = this.querySelector(".pets-form-complet") as HTMLElement;
+            x.style.display = "block";
+            x.style.position = "absolute";
+            form.style.display = "block";
+            nav.style.opacity = "0.3";
+            container.style.opacity = "0.3";
+            form.addEventListener("submit", (e) => {
+               e.preventDefault();
+
+               const nombreRecib = (
+                  this.querySelector(".nombre") as HTMLInputElement
+               ).value;
+               const tel = (this.querySelector(".telefono") as HTMLInputElement)
+                  .value;
+               const info = (
+                  this.querySelector(".informacion") as HTMLInputElement
+               ).value;
+
+               const data = {
+                  nombreRecib,
+                  tel,
+                  info,
+                  namePet: (pet as any).name,
+                  email: (pet as any).email,
+               };
+
+               sendinblue(data);
             });
-         }
-      }, 2000);
+            const close = this.querySelector(".btn-close") as HTMLElement;
+            close.addEventListener("click", () => {
+               x.style.display = "none";
+               x.style.position = "unset";
+               form.style.display = "none";
+               nav.style.opacity = "1";
+               container.style.opacity = "1";
+            });
+         });
+      }
+      function sendinblue(data) {
+         sendSmtpEmail.subject = `${data.namePet} fue vista`;
+         sendSmtpEmail.htmlContent = `<html><body><h2>${data.info}</h2><br><a href="tel:${data.tel}">LLamar : ${data.tel}</a></body></html>`;
+         sendSmtpEmail.sender = {
+            name: data.nombreRecib,
+            email: "bruno.am.59@gmail.com",
+         };
+         sendSmtpEmail.to = [{ email: data.email, name: data.nombre }];
+         apiInstance.sendTransacEmail(sendSmtpEmail).then(
+            function (res) {
+               console.log(
+                  "API called successfully. Returned data: " +
+                     JSON.stringify(res)
+               );
+               alert("Mensaje Enviado");
+               location.reload();
+            },
+            function (error) {
+               console.error("error", error);
+            }
+         );
+      }
    }
    render() {
       this.innerHTML = `
@@ -85,18 +137,18 @@ export class Pets extends HTMLElement {
             <h2 class="h2">Reportar info de Bobby</h2>
             <div class="mb-3">
                <label for="nombre" class="form-label">Nombre</label>
-               <input type="text" class="form-control" id="nombre" placeholder="">
+               <input type="text" class="nombre form-control" id="nombre" placeholder="" required>
             </div>
             <div class="mb-3">
                <label for="telefono" class="form-label">Teléfono</label>
-               <input type="tel" class="form-control" id="telefono" placeholder="name@example.com">
+               <input type="tel" class="telefono form-control" id="telefono" placeholder="" required>
             </div>
             <div class="mb-3">
                <label for="donde" class="form-label">Dónde lo viste?</label>
-               <textarea class="form-control" id="donde" rows="3"></textarea>
+               <textarea class="informacion form-control" id="donde" rows="3" required></textarea>
             </div>
             <div class="enviar">
-               <button type="button" class="btn btn-success">Enviar Información</button>
+               <button type="submit" class="btn btn-success">Enviar Información</button>
             </div>
          </form>
       </div>
@@ -105,6 +157,9 @@ export class Pets extends HTMLElement {
       
             <h1>Mascotas perdidas cerca</h1>
             <div class="pets-cerca">
+            </div>
+            <div class="com">
+               <h2 class="comprobar">No hay mascotas cerca</h2>
             </div>
             <template id="template">
                <div class="reportes">
@@ -140,6 +195,14 @@ export class Pets extends HTMLElement {
             padding:3% 10%;
             padding-bottom:0
          }
+         .com{
+            display:none;
+            height: 40vh;
+            display: flex;
+            flex-direction: column-reverse;
+            justify-content: flex-start;
+            align-items: center;
+           }
          .btn-closes{
             display: flex;
             justify-content: end;

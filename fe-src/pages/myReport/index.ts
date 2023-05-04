@@ -1,8 +1,9 @@
 import { Router } from "@vaadin/router";
 import { state } from "../../state";
-import { subscribe } from "diagnostics_channel";
 export class Reportes extends HTMLElement {
    async connectedCallback() {
+      await state.init();
+
       this.render();
       const cs = state.getState();
       const comprobar = this.querySelector(".com") as HTMLElement;
@@ -13,50 +14,45 @@ export class Reportes extends HTMLElement {
       } else {
          comprobar.style.display = "none";
       }
-      setTimeout(async () => {
-         const template = this.querySelector(
-            "#template"
-         ) as HTMLTemplateElement;
-         const petContainer = this.querySelector(".pets-cerca");
-         for (let el of state.pets) {
-            const img = template.content.querySelector(
-               ".img"
-            ) as HTMLImageElement;
 
-            const nombre = template.content
-               .querySelector(".card-body")
-               .querySelector(".nombre");
+      const template = this.querySelector("#template") as HTMLTemplateElement;
+      const petContainer = this.querySelector(".pets-cerca") as any;
+      for (let el of state.pets) {
+         const img = template.content.querySelector(".img") as HTMLImageElement;
 
-            const lugar = template.content
-               .querySelector(".card-body")
-               .querySelector(".lugar");
-            nombre.textContent = el.name;
-            lugar.textContent = el.lugar;
-            img.src = el.img;
-            const btn = template.content.querySelectorAll(".btn");
-            for (let els of btn) {
-               els.setAttribute("id", el.id);
-            }
-            let clone = document.importNode(template.content, true);
-            petContainer.appendChild(clone);
+         const nombre = template.content
+            .querySelector(".card-body")!
+            .querySelector(".nombre")!;
+
+         const lugar = template.content
+            .querySelector(".card-body")!
+            .querySelector(".lugar")!;
+         nombre.textContent = (el as any).name;
+         lugar.textContent = (el as any).lugar;
+         img.src = (el as any).img;
+         const btn = template.content.querySelectorAll(".btn");
+         for (let els of btn) {
+            els.setAttribute("id", (el as any).id);
          }
-         const editar = this.querySelectorAll(".editar");
-         editar.forEach((el) => {
-            el.addEventListener("click", (e) => {
-               state.idTemp = el.getAttribute("id");
-               Router.go("/editReport");
-            });
+         let clone = document.importNode(template.content, true);
+         petContainer.appendChild(clone);
+      }
+      const editar = this.querySelectorAll(".editar");
+      editar.forEach((el) => {
+         el.addEventListener("click", (e) => {
+            state.idTemp = el.getAttribute("id");
+            Router.go("/editReport");
          });
-         const borrar = this.querySelectorAll(".borrar");
-         borrar.forEach((el) => {
-            el.addEventListener("click", async (e) => {
-               state.idTemp = el.getAttribute("id");
-               await state.deletePet();
-               alert("Eliminado");
-               location.reload();
-            });
+      });
+      const borrar = this.querySelectorAll(".borrar");
+      borrar.forEach((el) => {
+         el.addEventListener("click", async (e) => {
+            state.idTemp = el.getAttribute("id");
+            await state.deletePet();
+            alert("Eliminado");
+            location.reload();
          });
-      }, 1500);
+      });
    }
 
    render() {
@@ -175,8 +171,3 @@ export class Reportes extends HTMLElement {
    }
 }
 customElements.define("page-myreport", Reportes);
-// h2{
-//    text-align:center;
-//    margin-bottom:10% !important;
-//    margin-top: 5% !important;
-// }

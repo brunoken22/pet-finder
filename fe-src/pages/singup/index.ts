@@ -2,29 +2,46 @@ import { Router } from "@vaadin/router";
 import { state } from "../../state";
 export class Singup extends HTMLElement {
    async connectedCallback() {
+      await state.init();
+
       this.render();
       const registro = this.querySelector(".login") as HTMLElement;
       registro.addEventListener("click", (e) => {
          Router.go("/login");
       });
-      const form = this.querySelector(".btn") as HTMLElement;
-      form.addEventListener("click", async (e) => {
+      const form = this.querySelector(".form-login") as HTMLElement;
+      form.addEventListener("submit", async (e) => {
+         e.preventDefault();
          const name = (this.querySelector(".name") as HTMLInputElement).value;
          const email = (this.querySelector(".email") as HTMLInputElement).value;
          const password = (this.querySelector(".password") as HTMLInputElement)
             .value;
-         const cs = state.getState();
-         cs.fullName = name;
-         cs.email = email;
-         cs.password = password;
-         const auth: any = await state.auth();
-         console.log(auth);
+         const repPassword = (
+            this.querySelector(".repit-password") as HTMLInputElement
+         ).value;
+         const validacion = validar(password, repPassword);
+         if (validacion) {
+            const cs = state.getState();
+            cs.fullName = name;
+            cs.email = email;
+            cs.password = password;
+            const auth: any = await state.auth();
 
-         if (auth.findAuth) Router.go("/datos");
-         else {
-            alert("Usuario Existente");
+            if (auth.findAuth) {
+               Router.go("/datos");
+            } else {
+               alert("Usuario Existente");
+            }
+         } else {
+            alert("La contraseña no coinciden");
          }
       });
+      function validar(pass: string, repPass: string) {
+         if (pass === repPass) {
+            return true;
+         }
+         return false;
+      }
    }
    render() {
       this.innerHTML = `
@@ -35,22 +52,22 @@ export class Singup extends HTMLElement {
                <h1 class="mb-3">Registrarse</h1>
                <div class="mb-3">
                   <label for="nombre" class="form-label">Nombre</label>
-                  <input type="text" class="form-control name" id="nombre" placeholder="Bruno Ken">
+                  <input type="text" class="form-control name" id="nombre" placeholder="Bruno Ken" required>
                </div>
                <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
-                  <input type="email" class="form-control email" id="email" placeholder="bruno_am_22@hotmail.com">
+                  <input type="email" class="form-control email" id="email" placeholder="bruno_am_22@hotmail.com" required>
                </div>
                <div class="mb-3">
                   <label for="password" class="form-label">Password</label>
-                  <input type="password" id="password" class="form-control password" aria-labelledby="passwordHelpBlock">
+                  <input type="password" id="password" class="password form-control password" aria-labelledby="passwordHelpBlock" required>
                </div>
                <div class="mb-3">
                   <label for="repit-password" class="form-label">Repetir password</label>
-                  <input type="password" id="repit-password" class="form-control" aria-labelledby="passwordHelpBlock">
+                  <input type="password" id="repit-password" class="repit-password form-control" aria-labelledby="passwordHelpBlock" required>
                </div>
                <div class="botones">
-                  <button type="button" class="btn btn-success btn-lg">Siguente</button>
+                  <button type="submit" class="btn btn-success btn-lg">Siguente</button>
                </div>
             </form>
             <p class="mt-5">Ya tenes cuenta?<a href="#" class="login"> Login</a></p>

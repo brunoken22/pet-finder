@@ -1,5 +1,4 @@
 import { Auth } from "../models";
-import { cloudinary } from "../lib/cloudinary";
 import * as crypto from "crypto";
 
 function getSHA256ofString(text: string) {
@@ -30,6 +29,7 @@ export async function singin(data) {
          password: passHasheada,
       },
    });
+
    return auth;
 }
 export async function modiAuth(id, data) {

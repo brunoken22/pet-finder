@@ -3,14 +3,14 @@ import { state } from "../../state";
 import * as mapboxgl from "mapbox-gl";
 import { initMapbox, geocoder } from "../../lib/mapbox";
 import { initDropzone } from "../../lib/dropzone";
-import { log } from "console";
 class Report extends HTMLElement {
-   connectedCallback() {
+   async connectedCallback() {
+      await state.init();
+
       this.render();
       const cs = state.getState();
       const comprobar = this.querySelector(".com") as HTMLElement;
       const container = this.querySelector(".container") as HTMLElement;
-      console.log(comprobar, container);
 
       if (!cs.token) {
          container.style.display = "none";
@@ -18,20 +18,22 @@ class Report extends HTMLElement {
          comprobar.style.display = "none";
       }
       const mapboxUbi = this.querySelector(".mapbox-ubi");
-      const btn = this.querySelector(".formulario");
+      const btn = this.querySelector(".formulario")!;
 
       btn.addEventListener("submit", async (e) => {
+         e.preventDefault();
+         alert("Reportado");
          const nameInput = (
             that.querySelector(".name-input") as HTMLInputElement
          ).value;
          const res = await state.createPet({
             name: nameInput,
+            email: cs.email,
             lugar: dataAGuardar["lugar"],
             img: dataAGuardar["dataUrl"],
             lat: dataAGuardar["lat"],
             lng: dataAGuardar["lng"],
          });
-         alert("Reportado");
          Router.go("/welcome");
       });
       const that = this;
@@ -60,7 +62,7 @@ class Report extends HTMLElement {
          myDropzone.on("thumbnail", function (file) {
             imgPet.src = file.dataURL;
             const component = document
-               .querySelector(".dz-preview")
+               .querySelector(".dz-preview")!
                .querySelectorAll("div");
 
             for (let el of component) {
@@ -118,8 +120,8 @@ class Report extends HTMLElement {
           gap: 20px;
         }
         .com{
+           display: flex;
          height: 50vh;
-         display: flex;
          flex-direction: column-reverse;
          justify-content: flex-start;
          align-items: center;

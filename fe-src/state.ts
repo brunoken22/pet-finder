@@ -1,4 +1,5 @@
-const Api_url = process.env.API_URL;
+const Api_url = process.env.API_URL || "http://localhost:3000";
+
 const state = {
    data: {
       fullName: "",
@@ -15,7 +16,7 @@ const state = {
       if (localStorage.token) {
          const data = localStorage.getItem("token");
          if (data == '""' || data == "undefined") return;
-         if (data || data !== "undefined") {
+         if (data) {
             const respuesta = await fetch(Api_url + "/init/token", {
                headers: {
                   "Content-Type": "application/json",
@@ -23,18 +24,20 @@ const state = {
                },
             });
             const res = await respuesta.json();
+            console.log(res.user);
+
             const mod = {
                fullName: res.user.fullName,
                email: res.user.email,
                token: JSON.parse(data),
                id: res.user.id,
             };
+
             this.setState(res.pet);
             this.setState(mod);
          }
       }
    },
-
    cerrarSesion() {
       localStorage.removeItem("token");
    },
@@ -56,7 +59,7 @@ const state = {
       return res;
    },
    async singin(email: string, password: string) {
-      const singin = await fetch(Api_url + "/auth/token", {
+      const sing = await fetch(Api_url + "/auth/token", {
          method: "post",
          headers: {
             "Content-Type": "application/json",
@@ -66,16 +69,17 @@ const state = {
             password,
          }),
       });
-      const json = await singin.json();
-      const res = await json;
-      const mod = {
-         fullName: res.auth.fullName,
-         email: res.auth.email,
-         token: res.token,
-         id: res.auth.id,
-      };
-      this.setState(mod);
-      this.init();
+      const res = await sing.json();
+
+      if (res.message == "Ingresastes") {
+         const mod = {
+            fullName: res.auth.fullName,
+            email: res.auth.email,
+            token: res.token,
+            id: res.auth.id,
+         };
+         this.setState(mod);
+      }
       return res;
    },
    async modificar() {
@@ -106,27 +110,16 @@ const state = {
 
       return respuestaJSON;
    },
-   async getPetsAll() {
-      const cs = this.getState();
-      try {
-         const respuesta = await fetch(Api_url + "/pets");
-         const res = await respuesta.json();
-         this.petsCerca.push(...res.pet);
-      } catch (e) {
-         console.log(e);
-      }
-   },
    async getPetCerca(lat, lng) {
-      const res = await fetch(Api_url + `/pet-cerca-de?lat=${lat}&lng=${lng}`);
+      const res = await fetch(Api_url + `/pet-cerca-de?lat=${lat}&lng=${lng}`, {
+         headers: {
+            "Content-Type": "application/json",
+         },
+      });
       const data = await res.json();
-      // console.log(data);
-      this.petsCerca = data[0];
+      this.petsCerca = data[0].hits;
 
       return data;
-      //  for (const comercio of results){
-      //    const {lat,lng}=comercio._geoloc;
-
-      //  }
    },
    async modPet(newpets) {
       const respuesta = await fetch(Api_url + "/pet/" + this.idTemp, {
@@ -157,7 +150,7 @@ const state = {
       if (newState.fullName) {
          this.data = newState;
       } else {
-         this.pets.push(...newState);
+         this.pets = [...newState];
          for (let cb of this.listeners) {
             cb();
          }

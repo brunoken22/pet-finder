@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
 
 const sequelize = new Sequelize(process.env.SEQUELIZE);
+
 try {
    sequelize.authenticate();
    console.log("Connection has been established successfully.");

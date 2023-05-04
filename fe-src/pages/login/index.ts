@@ -3,25 +3,25 @@ import { state } from "../../state";
 let img = require("../../img/login.png");
 export class Login extends HTMLElement {
    async connectedCallback() {
+      await state.init();
       this.render();
       const registro = this.querySelector(".registro") as HTMLElement;
       registro.addEventListener("click", (e) => {
          Router.go("/singup");
       });
-      const btn = this.querySelector(".btn") as HTMLElement;
-      btn.addEventListener("click", async (e) => {
+      const btn = this.querySelector(".form-login") as HTMLElement;
+      btn.addEventListener("submit", async (e) => {
+         e.preventDefault();
          const email = (this.querySelector(".email") as HTMLInputElement).value;
          const password = (this.querySelector(".password") as HTMLInputElement)
             .value;
 
-         try {
-            const res = await state.singin(email, password);
-            if (res.message == "Ingresastes") {
-               Router.go("./datos");
-            }
-         } catch (e) {
+         const res = await state.singin(email, password);
+
+         if (res.message == "Ingresastes") {
+            Router.go("./datos");
+         } else {
             alert("Contraseña o email incorrectos");
-            console.log("Error", e);
          }
       });
    }
@@ -35,15 +35,15 @@ export class Login extends HTMLElement {
                <h1 class="mb-3">Login</h1>
                <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
-                  <input type="email" class="form-control email" id="email" placeholder="bruno_am_22@hotmail.com">
+                  <input type="email" class="form-control email" id="email" placeholder="bruno_am_22@hotmail.com" required>
                </div>
                <div class="mb-3">
                   <label for="password" class="form-label">Password</label>
-                  <input type="password" id="password" class="form-control password" aria-labelledby="passwordHelpBlock">
+                  <input type="password" id="password" class="form-control password" aria-labelledby="passwordHelpBlock" required>
                   <a href="#"> <p>Olvidastes contraseña?</p></a>
                </div>
                <div class="botones">
-                  <button type="button" class="btn btn-success btn-lg">Acceder</button>
+                  <button type="submit" class="btn btn-success btn-lg">Acceder</button>
                </div>
             </form>
             <p class="mt-4">Aún no tenes cuenta?<a href="#" class="registro"> Registrate</a></p>

@@ -1,5 +1,4 @@
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN;
-
 import * as mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "mapbox-gl/dist/mapbox-gl.css";

@@ -2,26 +2,36 @@ import { Router } from "@vaadin/router";
 import { state } from "../../state";
 let img = require("../../img/refer.png");
 export class Welcome extends HTMLElement {
-   connectedCallback() {
-      setTimeout(() => {
-         this.render();
-         const ubication = this.querySelector(".ubication");
-
-         ubication.addEventListener("click", (e) => {
-            e.preventDefault();
-            const ubi = navigator.geolocation.getCurrentPosition(succes, error);
-         });
-         function succes(position) {
-            state.ubi.push(position.coords.latitude);
-            state.ubi.push(position.coords.longitude);
-            console.log(position.coords.latitude);
-            console.log(position.coords.longitude);
+   async connectedCallback() {
+      await state.init();
+      const ubi = localStorage.getItem("ubi") as any;
+      if (ubi) {
+         const dataUbi = JSON.parse(ubi);
+         if (dataUbi[0]) {
             Router.go("/pets");
+            return;
          }
-         function error() {
-            console.log("No Permitido");
-         }
-      }, 500);
+      }
+
+      this.render();
+      const ubication = this.querySelector(".ubication") as HTMLInputElement;
+
+      ubication.addEventListener("click", (e) => {
+         e.preventDefault();
+
+         navigator.geolocation.getCurrentPosition(succes, error);
+      });
+      function succes(position) {
+         const lat = position.coords.latitude;
+         const lng = position.coords.longitude;
+         state.ubi.push(lat);
+         state.ubi.push(lng);
+         localStorage.setItem("ubi", JSON.stringify(state.ubi));
+         Router.go("/pets");
+      }
+      function error() {
+         console.log("No Permitido");
+      }
    }
    render() {
       this.innerHTML = `

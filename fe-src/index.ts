@@ -14,7 +14,3 @@ import "./pages/datos";
 import "./pages/myReport";
 import "./pages/newReport";
 import "./pages/ediReport";
-
-(async function () {
-   await state.init();
-})();

@@ -3,14 +3,14 @@ import { state } from "../../state";
 import * as mapboxgl from "mapbox-gl";
 import { initDropzone } from "../../lib/dropzone";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
-import { log } from "console";
 
-const MAPBOX_TOKEN =
-   "pk.eyJ1IjoiZGVuaXNwYXJhZGEiLCJhIjoiY2t2cmhwbjZlMDM5czJ2cWlyczZoODg4cSJ9.6obRc3i_TK7qdx_A6_y-qg";
+const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN;
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
 class EditReport extends HTMLElement {
-   connectedCallback() {
+   async connectedCallback() {
+      await state.init();
+
       this.render();
 
       const mapboxUbi = this.querySelector(".mapbox-ubi");
