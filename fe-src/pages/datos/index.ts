@@ -138,6 +138,7 @@ export class Datos extends HTMLElement {
             height:100vh;
          }
          .com{
+            text-align: center;
             height: 50vh;
             display: flex;
             flex-direction: column-reverse;

@@ -196,6 +196,7 @@ export class Pets extends HTMLElement {
             padding-bottom:0
          }
          .com{
+            text-align: center;
             display:none;
             height: 40vh;
             display: flex;

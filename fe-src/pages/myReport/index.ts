@@ -91,6 +91,7 @@ export class Reportes extends HTMLElement {
 
          }
          .com{
+            text-align: center;
             height: 50vh;
             display: flex;
             flex-direction: column-reverse;

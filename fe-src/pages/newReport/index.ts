@@ -120,6 +120,7 @@ class Report extends HTMLElement {
           gap: 20px;
         }
         .com{
+         text-align: center;
            display: flex;
          height: 50vh;
          flex-direction: column-reverse;
