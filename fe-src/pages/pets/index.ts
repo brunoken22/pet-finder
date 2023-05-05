@@ -5,15 +5,13 @@ import { sendSmtpEmail, apiInstance } from "../../lib/sendinblue";
 export class Pets extends HTMLElement {
    async connectedCallback() {
       await state.init();
+      this.render();
 
       if (!state.ubi[0]) {
          Router.go("/welcome");
-      } 
+      }
 
-  this.render();
-         await state.getPetCerca(state.ubi[0], state.ubi[1]);
-      
-      
+      await state.getPetCerca(state.ubi[0], state.ubi[1]);
 
       const template = this.querySelector("#template") as HTMLTemplateElement;
       const petContainer = this.querySelector(".pets-cerca")!;
