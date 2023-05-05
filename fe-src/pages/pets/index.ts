@@ -5,11 +5,11 @@ import { sendSmtpEmail, apiInstance } from "../../lib/sendinblue";
 export class Pets extends HTMLElement {
    async connectedCallback() {
       await state.init();
-      this.render();
 
       if (!state.ubi[0]) {
          Router.go("/welcome");
       }
+      await this.render();
 
       await state.getPetCerca(state.ubi[0], state.ubi[1]);
 
@@ -120,7 +120,7 @@ export class Pets extends HTMLElement {
          );
       }
    }
-   render() {
+   async render() {
       this.innerHTML = `
       <link
       href="//api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css"
