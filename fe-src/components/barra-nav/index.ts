@@ -1,5 +1,7 @@
 import { Router, RouterLocation } from "@vaadin/router";
 import { state } from "../../state";
+const Api_url = process.env.API_URL || "http://localhost:3000";
+
 const logo = require("../../img/logo.png");
 class Barra extends HTMLElement {
    connectedCallback() {
@@ -62,7 +64,11 @@ class Barra extends HTMLElement {
       (this.shadowRoot as any)
          .querySelector(".inicio")
          .addEventListener("click", (e) => {
-            Router.go("/welcome");
+            console.log(Api_url + "/pets");
+
+            if (location.href !== Api_url + "/pets") {
+               Router.go("/welcome");
+            }
          });
    }
    render() {

@@ -6,9 +6,7 @@ export class Welcome extends HTMLElement {
       await state.init();
       this.render();
       if (state.ubi[0]) {
-         setTimeout(() => {
-            Router.go("/pets");
-         }, 50);
+         Router.go("/pets");
       }
 
       const ubication = this.querySelector(".ubication") as HTMLInputElement;
