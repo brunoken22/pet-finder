@@ -8,10 +8,12 @@ export class Pets extends HTMLElement {
 
       if (!state.ubi[0]) {
          Router.go("/welcome");
-      } else {
+      } 
+
+  this.render();
          await state.getPetCerca(state.ubi[0], state.ubi[1]);
-      }
-      this.render();
+      
+      
 
       const template = this.querySelector("#template") as HTMLTemplateElement;
       const petContainer = this.querySelector(".pets-cerca")!;
