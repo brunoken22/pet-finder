@@ -22,7 +22,7 @@ class Report extends HTMLElement {
 
       btn.addEventListener("submit", async (e) => {
          e.preventDefault();
-         alert("Reportado");
+         
          const nameInput = (
             that.querySelector(".name-input") as HTMLInputElement
          ).value;
@@ -34,6 +34,8 @@ class Report extends HTMLElement {
             lat: dataAGuardar["lat"],
             lng: dataAGuardar["lng"],
          });
+         alert("Reportado");
+
          Router.go("/welcome");
       });
       const that = this;
