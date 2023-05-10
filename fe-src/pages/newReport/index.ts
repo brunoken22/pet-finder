@@ -71,6 +71,8 @@ class Report extends HTMLElement {
             const imagen = document.querySelector(".imagen") as any;
             imagen.src = file.dataURL;
             imagen.style.display = "block";
+            console.log(file.dataURL);
+
             dataAGuardar["dataUrl"] = file.dataURL;
          });
       }

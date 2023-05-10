@@ -162,7 +162,7 @@ export class Pets extends HTMLElement {
             <template id="template">
                <div class="reportes">
                   <div class="card" style="width: 18rem;">
-                     <img src="" alt="" class="img">
+                     <img src="" alt="" class="img" height="250px">
                      <div class="card-body">
                         <h5 class="nombre card-title">Bobby</h5>
                         <p class="lugar card-text">Nuñez, Buenos Aires,</p>
@@ -192,6 +192,9 @@ export class Pets extends HTMLElement {
             align-items:center;
             padding:3% 10%;
             padding-bottom:0
+         }
+         .reportes{
+
          }
          .com{
             text-align: center;
