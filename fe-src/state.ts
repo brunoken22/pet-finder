@@ -31,8 +31,9 @@ const state = {
                token: JSON.parse(data),
                id: res.user.id,
             };
-
-            this.setState(res.pet);
+            if (res.user.email) {
+               this.setState(res.pet);
+            }
             this.setState(mod);
          }
       }
