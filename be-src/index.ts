@@ -209,7 +209,7 @@ app.get("/pet-cerca-de", async (req, res) => {
    const { lat, lng } = req.query;
 
    const respuesta: any = await getAllPetCerca(lat, lng);
-   res.json([respuesta]);
+   res.status(200).json([respuesta]);
 });
 
 app.use(express.static(ruta));

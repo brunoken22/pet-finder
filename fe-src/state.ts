@@ -123,7 +123,11 @@ const state = {
          },
       });
       const data = await res.json();
-      this.petsCerca = data[0].hits;
+      console.log(data);
+
+      if (data[0]) {
+         this.petsCerca = data[0].hits;
+      }
 
       return data;
    },
