@@ -213,7 +213,21 @@ app.get("/pet-cerca-de", async (req, res) => {
    const respuesta: any = await getAllPetCerca(lat, lng);
    res.status(200).json([respuesta]);
 });
+app.post("/sendinblue", (req, res) => {
+   if (!req.body) {
+      console.log("errror 1");
 
+      res.json({
+         message: "Error",
+      });
+      return;
+   }
+   const send = sendinblue(req.body);
+   res.json({
+      send,
+      message: "ok",
+   });
+});
 app.use(express.static(ruta));
 app.get("*", function (req, res) {
    res.sendFile(ruta + "/index.html");
