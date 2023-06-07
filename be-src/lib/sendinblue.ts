@@ -1,4 +1,4 @@
-const axios = require("axios");
+import axios from "axios"
 
 // Configura tus credenciales y detalles del correo electrónico
 export function sendinblue(data) {
