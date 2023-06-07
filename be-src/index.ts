@@ -224,7 +224,6 @@ app.post("/sendinblue", (req, res) => {
    }
    const send = sendinblue(req.body);
    res.json({
-      send,
       message: "ok",
    });
 });
