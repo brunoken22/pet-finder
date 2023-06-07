@@ -66,7 +66,6 @@ export class Pets extends HTMLElement {
             container.style.opacity = "0.3";
             form.addEventListener("submit", (e) => {
                e.preventDefault();
-
                const nombreRecib = (
                   this.querySelector(".nombre") as HTMLInputElement
                ).value;

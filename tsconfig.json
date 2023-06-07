@@ -1,12 +1,13 @@
 {
    "compilerOptions": {
+      "noEmit": true,
+      "allowImportingTsExtensions": true,
       "target": "ESNext",
       "module": "CommonJS",
       "moduleResolution": "node",
       "resolveJsonModule": true,
       "esModuleInterop": true,
-      "noEmit": true,
-      "allowImportingTsExtensions": true,
+
       "outDir": "be-dist"  
    },
    "include": ["./be-src/**/*.ts"]

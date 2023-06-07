@@ -130,7 +130,7 @@ class Barra extends HTMLElement {
         } 
 
         .navbar{
-            background-color:#000;
+            background-color:#red;
          } 
          .navbar-burger span{
           color: #fff !important;
@@ -168,7 +168,7 @@ class Barra extends HTMLElement {
             }
             .cerrar{
                margin-right:0 
-            }
+           } 
           }
          `;
 

@@ -1,9 +1,9 @@
-import axios from "axios"
+const axios = require("axios");
 
 // Configura tus credenciales y detalles del correo electrónico
 export function sendinblue(data) {
    const apiKey =
-      "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";
+      "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";
    const senderEmail = "bruno.am.59@gmail.com";
    const recipientEmail = data.nombreRecib;
    const subject = `${data.namePet} fue visto/a`;
@@ -29,6 +29,6 @@ export function sendinblue(data) {
          console.log("Correo electrónico enviado:");
       })
       .catch((error) => {
-         console.error("Error al enviar el correo electrónico:");
+         console.error("Error al enviar el correo electrónico:", error);
       });
 }
