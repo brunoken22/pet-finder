@@ -2,7 +2,7 @@ import * as path from "path";
 import express from "express";
 import cors from "cors";
 import * as jwt from "jsonwebtoken";
-import { sendinblue } from "./lib/sendinblue.ts";
+import { sendinblue } from "./lib/sendinblue";
 
 import {
    createUser,
