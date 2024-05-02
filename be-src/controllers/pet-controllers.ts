@@ -41,6 +41,7 @@ export async function getPetToken(token) {
   return user;
 }
 export async function modPet(id, data) {
+  const imgSubida = await cloudinary.uploader.upload(data.img);
   function modifPet(pet, id?) {
     const respuesta: any = {};
     if (pet.name) {
@@ -57,17 +58,25 @@ export async function modPet(id, data) {
     }
     return respuesta;
   }
-  const actualizadoPet = await Pet.update(data, {
-    where: {
-      id: id,
-    },
-  });
-  const newPet = await Pet.findByPk(id);
+  const actualizadoPet = await Pet.update(
+    {...data, img: imgSubida},
+    {
+      where: {
+        id: id,
+      },
+    }
+  );
 
-  const complete = await modifPet(newPet, id);
+  const complete = await modifPet(
+    {
+      ...data,
+      img: imgSubida,
+    },
+    id
+  );
 
   await index.partialUpdateObject(complete);
-  return newPet;
+  return actualizadoPet;
 }
 export async function deletePet(id) {
   const petRes = await Pet.destroy({
