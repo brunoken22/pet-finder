@@ -13,32 +13,28 @@ const state = {
   ubi: [],
   listeners: [],
   async init() {
-    if (localStorage.token) {
-      const data = localStorage.getItem('token');
-      if (data == '""' || data == 'undefined') return;
-      if (data) {
-        const respuesta = await fetch(Api_url + '/init/token', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'bearer ' + JSON.parse(data),
-          },
-        });
-        const res = await respuesta.json();
+    const token = await localStorage.token;
+    if (token) {
+      const respuesta = await fetch(Api_url + '/init/token', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'bearer ' + JSON.parse(token),
+        },
+      });
+      const res = await respuesta.json();
 
-        const mod = {
-          fullName: res.user.fullName,
-          email: res.user.email,
-          token: JSON.parse(data),
-          id: res.user.id,
-        };
-        if (res.user.email) {
-          this.setState(res.pet);
-        }
-        this.setState(mod);
+      const mod = {
+        fullName: res.user.fullName,
+        email: res.user.email,
+        token: JSON.parse(token),
+        id: res.user.id,
+      };
+      if (res.user.email) {
+        this.setState(res.user.Pets);
       }
+      this.setState(mod);
     }
     const ubi: any = localStorage.getItem('ubi');
-    console.log(ubi);
 
     if (JSON.parse(ubi)) {
       state.ubi = JSON.parse(ubi);

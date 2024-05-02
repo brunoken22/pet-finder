@@ -129,17 +129,18 @@ app.put('/datos/:id', async (req, res) => {
 
 //Mantener iniciado
 app.get('/init/token', async (req, res) => {
-  const token = req.headers.authorization.split(' ')[1];
-
-  if (!token) {
-    res.status(400).json({
-      message: 'Falta token',
-    });
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    if (!token) {
+      res.status(400).json({
+        message: 'Falta token',
+      });
+    }
+    const user = await getUserToken(token);
+    res.status(200).json(user);
+  } catch (e: any) {
+    res.status(500).json({message: e.message});
   }
-  const user = await getUserToken(token);
-  const pet = await getPetToken(token);
-
-  res.json({user, pet});
 });
 
 //Crea pet
