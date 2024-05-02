@@ -5,7 +5,6 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
     "outDir": "be-dist"
   },
   "include": ["./be-src/**/*.ts", "./be-src"]
