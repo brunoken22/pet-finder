@@ -1,87 +1,86 @@
-import { Router } from "@vaadin/router";
-import { state } from "../../state";
-import * as mapboxgl from "mapbox-gl";
-import { initMapbox, geocoder } from "../../lib/mapbox";
-import { initDropzone } from "../../lib/dropzone";
+import {Router} from '@vaadin/router';
+import {state} from '../../state';
+import * as mapboxgl from 'mapbox-gl';
+import {initMapbox, geocoder} from '../../lib/mapbox';
+import {initDropzone} from '../../lib/dropzone';
 class Report extends HTMLElement {
-   async connectedCallback() {
-      await state.init();
+  async connectedCallback() {
+    await state.init();
 
-      this.render();
-      const cs = state.getState();
-      const comprobar = this.querySelector(".com") as HTMLElement;
-      const container = this.querySelector(".container") as HTMLElement;
+    this.render();
+    const cs = state.getState();
+    const comprobar = this.querySelector('.com') as HTMLElement;
+    const container = this.querySelector('.container') as HTMLElement;
 
-      if (!cs.token) {
-         container.style.display = "none";
-      } else {
-         comprobar.style.display = "none";
-      }
-      const mapboxUbi = this.querySelector(".mapbox-ubi");
-      const btn = this.querySelector(".formulario")!;
+    if (!cs.token) {
+      container.style.display = 'none';
+    } else {
+      comprobar.style.display = 'none';
+    }
+    const mapboxUbi = this.querySelector('.mapbox-ubi');
+    const btn = this.querySelector('.formulario')!;
 
-      btn.addEventListener("submit", async (e) => {
-         e.preventDefault();
-         
-         const nameInput = (
-            that.querySelector(".name-input") as HTMLInputElement
-         ).value;
-         const res = await state.createPet({
-            name: nameInput,
-            email: cs.email,
-            lugar: dataAGuardar["lugar"],
-            img: dataAGuardar["dataUrl"],
-            lat: dataAGuardar["lat"],
-            lng: dataAGuardar["lng"],
-         });
-         alert("Reportado");
+    btn.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-         Router.go("/welcome");
+      const nameInput = (that.querySelector('.name-input') as HTMLInputElement)
+        .value;
+      await state.createPet({
+        name: nameInput,
+        email: cs.email,
+        lugar: dataAGuardar['lugar'],
+        img: dataAGuardar['dataUrl'],
+        lat: dataAGuardar['lat'],
+        lng: dataAGuardar['lng'],
       });
-      const that = this;
-      dataDropzone();
-      dataMapbox(mapboxUbi);
-      const dataAGuardar = {};
-      function dataMapbox(el: Element | null) {
-         const map = initMapbox(el);
-         const search = that.querySelector(".search") as HTMLInputElement;
+      alert('Reportado');
 
-         search.appendChild(geocoder.onAdd(map));
-         geocoder.on("result", function (e) {
-            const result = e.result;
-            const [lng, lat] = result.geometry.coordinates;
-            new mapboxgl.Marker().setLngLat([lng, lat]).addTo(map);
-            map.setCenter([lng, lat]);
-            map.setZoom(14);
-            dataAGuardar["lugar"] = result.place_name;
-            dataAGuardar["lng"] = lng;
-            dataAGuardar["lat"] = lat;
-         });
-      }
-      function dataDropzone() {
-         const imgPet: any = that.querySelector(".imagen");
-         const myDropzone = initDropzone(".foto");
-         myDropzone.on("thumbnail", function (file) {
-            imgPet.src = file.dataURL;
-            const component = document
-               .querySelector(".dz-preview")!
-               .querySelectorAll("div");
+      Router.go('/myReport');
+    });
+    const that = this;
+    dataDropzone();
+    dataMapbox(mapboxUbi);
+    const dataAGuardar = {};
+    function dataMapbox(el: Element | null) {
+      const map = initMapbox(el);
+      const search = that.querySelector('.search') as HTMLInputElement;
 
-            for (let el of component) {
-               el.style.display = "none";
-            }
-            const imagen = document.querySelector(".imagen") as any;
-            imagen.src = file.dataURL;
-            imagen.style.display = "block";
-            console.log(file.dataURL);
+      search.appendChild(geocoder.onAdd(map));
+      geocoder.on('result', function (e) {
+        const result = e.result;
+        const [lng, lat] = result.geometry.coordinates;
+        new mapboxgl.Marker().setLngLat([lng, lat]).addTo(map);
+        map.setCenter([lng, lat]);
+        map.setZoom(14);
+        dataAGuardar['lugar'] = result.place_name;
+        dataAGuardar['lng'] = lng;
+        dataAGuardar['lat'] = lat;
+      });
+    }
+    function dataDropzone() {
+      const imgPet: any = that.querySelector('.imagen');
+      const myDropzone = initDropzone('.foto');
+      myDropzone.on('thumbnail', function (file) {
+        imgPet.src = file.dataURL;
+        const component = document
+          .querySelector('.dz-preview')!
+          .querySelectorAll('div');
 
-            dataAGuardar["dataUrl"] = file.dataURL;
-         });
-      }
-   }
+        for (let el of component) {
+          el.style.display = 'none';
+        }
+        const imagen = document.querySelector('.imagen') as any;
+        imagen.src = file.dataURL;
+        imagen.style.display = 'block';
+        console.log(file.dataURL);
 
-   render() {
-      this.innerHTML = `
+        dataAGuardar['dataUrl'] = file.dataURL;
+      });
+    }
+  }
+
+  render() {
+    this.innerHTML = `
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
       <custom-barra></custom-barra>
       <div class="com">
@@ -112,8 +111,8 @@ class Report extends HTMLElement {
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     `;
 
-      const style = document.createElement("style");
-      style.innerHTML = `
+    const style = document.createElement('style');
+    style.innerHTML = `
       body{
          background-color: #E5E5E5;
       }
@@ -171,7 +170,7 @@ class Report extends HTMLElement {
         max-width: none
       }
       `;
-      this.appendChild(style);
-   }
+    this.appendChild(style);
+  }
 }
-customElements.define("page-newreport", Report);
+customElements.define('page-newreport', Report);
