@@ -40,7 +40,7 @@ export async function getPetToken(token) {
   });
   return user;
 }
-export async function modPet(id, data) {
+export async function modPet(id: string, data) {
   const imgSubida = await cloudinary.uploader.upload(data.img);
   function modifPet(pet, id?) {
     const respuesta: any = {};
@@ -58,19 +58,17 @@ export async function modPet(id, data) {
     }
     return respuesta;
   }
-  const actualizadoPet = await Pet.update(
-    {...data, img: imgSubida},
-    {
-      where: {
-        id: id,
-      },
-    }
-  );
+  const newDataUpdate = {...data, img: imgSubida.url};
+  const actualizadoPet = await Pet.update(newDataUpdate, {
+    where: {
+      id: id,
+    },
+  });
 
   const complete = await modifPet(
     {
       ...data,
-      img: imgSubida,
+      img: imgSubida.url,
     },
     id
   );
