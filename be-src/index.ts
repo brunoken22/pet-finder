@@ -161,17 +161,21 @@ app.post('/pet', async (req, res) => {
 
 //Modifica Pet
 app.put('/pet/:id', async (req, res) => {
-  const {id} = req.params;
-  if (!id || !req.body) {
-    res.status(400).json({
-      message: 'Me faltan Datos',
+  try {
+    const {id} = req.params;
+    if (!id || !req.body) {
+      res.status(400).json({
+        message: 'Me faltan Datos',
+      });
+    }
+    const algoliaRes = await modPet(id, req.body);
+    res.json({
+      message: 'Todo Ok',
+      algoliaRes,
     });
+  } catch (e: any) {
+    res.status(500).json({message: e.message});
   }
-  const algoliaRes = await modPet(id, req.body);
-  res.json({
-    message: 'Todo Ok',
-    algoliaRes,
-  });
 });
 //Elimina pet
 app.delete('/pet/:id', async (req, res) => {
