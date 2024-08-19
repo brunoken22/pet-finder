@@ -16,8 +16,6 @@ export async function sendinblue(data) {
     htmlContent: content,
   };
 
-  console.log('apiKey ' + apiKey);
-
   // Realiza la solicitud POST para enviar el correo electrónico
   return axios
     .post('https://api.brevo.com/v3/smtp/email', send, {
