@@ -1,6 +1,5 @@
 import {state} from '../../state';
 import {Router} from '@vaadin/router';
-import {sendSmtpEmail, apiInstance} from '../../lib/sendinblue';
 
 export class Pets extends HTMLElement {
   async connectedCallback() {
@@ -93,23 +92,6 @@ export class Pets extends HTMLElement {
         });
       });
     }
-    // function sendinblue(data) {
-    //    sendSmtpEmail.subject = `${data.namePet} fue vista`;
-    //    sendSmtpEmail.htmlContent = `<html><body><h2>${data.info}</h2><br><a href="tel:${data.tel}">LLamar : ${data.tel}</a></body></html>`;
-    //    sendSmtpEmail.sender = {
-    //       name: data.nombreRecib,
-    //       email: "bruno.am.59@gmail.com",
-    //    };
-    //    sendSmtpEmail.to = [{ email: data.email, name: data.nombre }];
-    //    apiInstance.sendTransacEmail(sendSmtpEmail).then(
-    //       function (res) {
-
-    //          alert("Mensaje Enviado");
-    //          location.reload();
-    //       },
-
-    //    );
-    // }
   }
   async render() {
     this.innerHTML = `
