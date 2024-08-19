@@ -22,15 +22,14 @@ const state = {
         },
       });
       const res = await respuesta.json();
-
       const mod = {
-        fullName: res.user.fullName,
-        email: res.user.email,
+        fullName: res.fullName,
+        email: res.email,
         token: JSON.parse(token),
-        id: res.user.id,
+        id: res.id,
       };
-      if (res.user.email) {
-        this.setState(res.user.Pets);
+      if (res.email) {
+        this.setState(res.Pets);
       }
       this.setState(mod);
     }
@@ -123,7 +122,6 @@ const state = {
       },
     });
     const data = await res.json();
-    console.log(data);
 
     if (data[0]) {
       this.petsCerca = data[0].hits;
@@ -151,6 +149,16 @@ const state = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+    });
+  },
+  async reportPet(data) {
+    const response = await fetch(Api_url + '/sendinblue/' + this.idTemp, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     });
   },
   getState() {

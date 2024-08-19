@@ -64,7 +64,6 @@ class Barra extends HTMLElement {
       (this.shadowRoot as any)
          .querySelector(".inicio")
          .addEventListener("click", (e) => {
-            console.log(Api_url + "/pets");
 
             if (location.href !== Api_url + "/pets") {
                Router.go("/welcome");

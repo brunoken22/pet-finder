@@ -115,5 +115,6 @@ export async function getAllPetCerca(lat, lng) {
     return hits;
   } catch (e) {
     console.log(e);
+    return e.message;
   }
 }

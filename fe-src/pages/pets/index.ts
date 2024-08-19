@@ -1,125 +1,118 @@
-import { state } from "../../state";
-import { Router } from "@vaadin/router";
-import { sendSmtpEmail, apiInstance } from "../../lib/sendinblue";
+import {state} from '../../state';
+import {Router} from '@vaadin/router';
+import {sendSmtpEmail, apiInstance} from '../../lib/sendinblue';
 
 export class Pets extends HTMLElement {
-   async connectedCallback() {
-      await state.init();
+  async connectedCallback() {
+    await state.init();
 
-      if (!state.ubi[0]) {
-         Router.go("/welcome");
+    if (!state.ubi[0]) {
+      Router.go('/welcome');
+    }
+    await state.getPetCerca(state.ubi[0], state.ubi[1]);
+    await this.render();
+
+    const template = this.querySelector('#template') as HTMLTemplateElement;
+    const petContainer = this.querySelector('.pets-cerca')!;
+
+    for (let el of state.petsCerca) {
+      const comprobar = this.querySelector('.com') as HTMLElement;
+      if (!el) {
+        comprobar.style.display = 'flex';
       }
-      await state.getPetCerca(state.ubi[0], state.ubi[1]);
-      await this.render();
+      comprobar.style.display = 'none';
 
-      const template = this.querySelector("#template") as HTMLTemplateElement;
-      const petContainer = this.querySelector(".pets-cerca")!;
+      const img = template.content.querySelector('.img') as HTMLImageElement;
+      const nombre = template.content
+        .querySelector('.card-body')!
+        .querySelector('.nombre') as HTMLElement;
 
-      for (let el of state.petsCerca) {
-         const comprobar = this.querySelector(".com") as HTMLElement;
-         if (!el) {
-            comprobar.style.display = "flex";
-         }
-         comprobar.style.display = "none";
+      const lugar = template.content
+        .querySelector('.card-body')!
+        .querySelector('.lugar') as HTMLElement;
 
-         const img = template.content.querySelector(".img") as HTMLImageElement;
-         const nombre = template.content
-            .querySelector(".card-body")!
-            .querySelector(".nombre") as HTMLElement;
-
-         const lugar = template.content
-            .querySelector(".card-body")!
-            .querySelector(".lugar") as HTMLElement;
-
-         nombre.textContent = (el as any).name;
-         lugar.textContent = (el as any).lugar;
-         img.src = (el as any).img;
-         const btn = template.content.querySelectorAll(".reportar");
-         for (let els of btn) {
-            els.setAttribute("id", (el as any).objectID);
-         }
-         let clone = document.importNode(template.content, true);
-         petContainer.appendChild(clone);
+      nombre.textContent = (el as any).name;
+      lugar.textContent = (el as any).lugar;
+      img.src = (el as any).img;
+      const btn = template.content.querySelectorAll('.reportar');
+      for (let els of btn) {
+        els.setAttribute('id', (el as any).objectID);
       }
-      const reports = this.querySelectorAll(".reportar");
+      let clone = document.importNode(template.content, true);
+      petContainer.appendChild(clone);
+    }
+    const reports = this.querySelectorAll('.reportar');
 
-      for (let link of reports) {
-         link.addEventListener("click", (e: any) => {
-            e.preventDefault();
-            const form = this.querySelector(".pets-form") as any;
+    for (let link of reports) {
+      link.addEventListener('click', (e: any) => {
+        e.preventDefault();
+        const form = this.querySelector('.pets-form') as any;
 
-            const h2 = this.querySelector(".h2") as any;
+        const h2 = this.querySelector('.h2') as any;
 
-            const pet = state.petsCerca.find(
-               (el) => (el as any).objectID == e.target.getAttribute("id")
-            );
+        const pet = state.petsCerca.find(
+          (el) => (el as any).objectID == e.target.getAttribute('id')
+        );
 
-            h2.textContent = "Reportar info de " + (pet as any).name;
+        h2.textContent = 'Reportar info de ' + (pet as any).name;
 
-            const nav = this.querySelector(".navs") as HTMLElement;
-            const container = this.querySelector(".container") as HTMLElement;
-            const x = this.querySelector(".pets-form-complet") as HTMLElement;
-            x.style.display = "block";
-            x.style.position = "absolute";
-            form.style.display = "block";
-            nav.style.opacity = "0.3";
-            container.style.opacity = "0.3";
-            form.addEventListener("submit", (e) => {
-               e.preventDefault();
-               const nombreRecib = (
-                  this.querySelector(".nombre") as HTMLInputElement
-               ).value;
-               const tel = (this.querySelector(".telefono") as HTMLInputElement)
-                  .value;
-               const info = (
-                  this.querySelector(".informacion") as HTMLInputElement
-               ).value;
+        const nav = this.querySelector('.navs') as HTMLElement;
+        const container = this.querySelector('.container') as HTMLElement;
+        const x = this.querySelector('.pets-form-complet') as HTMLElement;
+        x.style.display = 'block';
+        x.style.position = 'absolute';
+        form.style.display = 'block';
+        nav.style.opacity = '0.3';
+        container.style.opacity = '0.3';
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const nombreRecib = (
+            this.querySelector('.nombre') as HTMLInputElement
+          ).value;
+          const tel = (this.querySelector('.telefono') as HTMLInputElement)
+            .value;
+          const info = (this.querySelector('.informacion') as HTMLInputElement)
+            .value;
 
-               const data = {
-                  nombreRecib,
-                  tel,
-                  info,
-                  namePet: (pet as any).name,
-                  email: (pet as any).email,
-               };
+          const data = {
+            nombreRecib,
+            tel,
+            info,
+            name: (pet as any).name,
+            email: (pet as any).email,
+          };
+          await state.reportPet(data);
+        });
+        const close = this.querySelector('.btn-close') as HTMLElement;
+        close.addEventListener('click', () => {
+          x.style.display = 'none';
+          x.style.position = 'unset';
+          form.style.display = 'none';
+          nav.style.opacity = '1';
+          container.style.opacity = '1';
+        });
+      });
+    }
+    // function sendinblue(data) {
+    //    sendSmtpEmail.subject = `${data.namePet} fue vista`;
+    //    sendSmtpEmail.htmlContent = `<html><body><h2>${data.info}</h2><br><a href="tel:${data.tel}">LLamar : ${data.tel}</a></body></html>`;
+    //    sendSmtpEmail.sender = {
+    //       name: data.nombreRecib,
+    //       email: "bruno.am.59@gmail.com",
+    //    };
+    //    sendSmtpEmail.to = [{ email: data.email, name: data.nombre }];
+    //    apiInstance.sendTransacEmail(sendSmtpEmail).then(
+    //       function (res) {
 
-               sendinblue(data);
-            });
-            const close = this.querySelector(".btn-close") as HTMLElement;
-            close.addEventListener("click", () => {
-               x.style.display = "none";
-               x.style.position = "unset";
-               form.style.display = "none";
-               nav.style.opacity = "1";
-               container.style.opacity = "1";
-            });
-         });
-      }
-      function sendinblue(data) {
-         sendSmtpEmail.subject = `${data.namePet} fue vista`;
-         sendSmtpEmail.htmlContent = `<html><body><h2>${data.info}</h2><br><a href="tel:${data.tel}">LLamar : ${data.tel}</a></body></html>`;
-         sendSmtpEmail.sender = {
-            name: data.nombreRecib,
-            email: "bruno.am.59@gmail.com",
-         };
-         sendSmtpEmail.to = [{ email: data.email, name: data.nombre }];
-         apiInstance.sendTransacEmail(sendSmtpEmail).then(
-            function (res) {
-               console.log(
-                  "API called successfully. Returned data: " +
-                     JSON.stringify(res)
-               );
-               alert("Mensaje Enviado");
-               location.reload();
-            },
-            function (error) {
-               console.error("error", error);
-            }
-         );
-      }
-   }
-   async render() {
-      this.innerHTML = `
+    //          alert("Mensaje Enviado");
+    //          location.reload();
+    //       },
+
+    //    );
+    // }
+  }
+  async render() {
+    this.innerHTML = `
       <link
       href="//api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css"
       rel="stylesheet"
@@ -174,8 +167,8 @@ export class Pets extends HTMLElement {
          <script src="//unpkg.com/mapbox@1.0.0-beta9/dist/mapbox-sdk.min.js"></script>
          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
       `;
-      const style = document.createElement("style");
-      style.innerHTML = `
+    const style = document.createElement('style');
+    style.innerHTML = `
          body{
             background-color:#E5E5E5;
             height:100vh;
@@ -260,7 +253,7 @@ export class Pets extends HTMLElement {
 
          }
       `;
-      this.appendChild(style);
-   }
+    this.appendChild(style);
+  }
 }
-customElements.define("page-pets", Pets);
+customElements.define('page-pets', Pets);

@@ -23,7 +23,6 @@ import {
   getAllPets,
   modPet,
   deletePet,
-  getPetToken,
   getAllPetCerca,
 } from './controllers/pet-controllers';
 
@@ -54,7 +53,6 @@ app.get('/user', async (req, res) => {
 });
 
 app.get('/auth', async (req, res) => {
-  console.log(req.body);
   const auth = await getAuth();
   res.status(200).json(auth);
 });
@@ -82,8 +80,6 @@ app.post('/auth/token', async (req, res) => {
     });
     return auth;
   } else {
-    console.log('inco');
-
     res.json({message: 'Incorreto'});
   }
 });
@@ -220,14 +216,14 @@ app.get('/pet-cerca-de', async (req, res) => {
   const respuesta: any = await getAllPetCerca(lat, lng);
   res.status(200).json([respuesta]);
 });
-app.post('/sendinblue', (req, res) => {
+app.post('/sendinblue', async (req, res) => {
   if (!req.body) {
     res.json({
       message: 'Error',
     });
     return;
   }
-  const send = sendinblue(req.body);
+  const send = await sendinblue(req.body);
   res.json({
     send,
     message: 'ok',

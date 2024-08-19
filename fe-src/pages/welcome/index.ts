@@ -1,35 +1,32 @@
-import { Router } from "@vaadin/router";
-import { state } from "../../state";
-let img = require("../../img/refer.png");
+import {Router} from '@vaadin/router';
+import {state} from '../../state';
+let img = require('../../img/refer.png');
 export class Welcome extends HTMLElement {
-   async connectedCallback() {
-      await state.init();
-      this.render();
-      if (state.ubi[0]) {
-         Router.go("/pets");
-      }
+  async connectedCallback() {
+    await state.init();
+    this.render();
+    if (state.ubi[0]) {
+      Router.go('/pets');
+    }
 
-      const ubication = this.querySelector(".ubication") as HTMLInputElement;
+    const ubication = this.querySelector('.ubication') as HTMLInputElement;
 
-      ubication.addEventListener("click", (e) => {
-         e.preventDefault();
+    ubication.addEventListener('click', (e) => {
+      e.preventDefault();
 
-         navigator.geolocation.getCurrentPosition(succes, error);
-      });
-      function succes(position) {
-         const lat = position.coords.latitude;
-         const lng = position.coords.longitude;
-         state.ubi = [lat, lng];
+      navigator.geolocation.getCurrentPosition(succes);
+    });
+    function succes(position) {
+      const lat: any = position.coords.latitude;
+      const lng: any = position.coords.longitude;
+      state.ubi = [lat, lng];
 
-         localStorage.setItem("ubi", JSON.stringify(state.ubi));
-         Router.go("/pets");
-      }
-      function error() {
-         console.log("No Permitido");
-      }
-   }
-   render() {
-      this.innerHTML = `
+      localStorage.setItem('ubi', JSON.stringify(state.ubi));
+      Router.go('/pets');
+    }
+  }
+  render() {
+    this.innerHTML = `
          <custom-barra></custom-barra>
          <div class="container">
             <img src="${img}">
@@ -41,8 +38,8 @@ export class Welcome extends HTMLElement {
             </div>
          </div>
       `;
-      const style = document.createElement("style");
-      style.innerHTML = `
+    const style = document.createElement('style');
+    style.innerHTML = `
          body{
             background-color:#E5E5E5;
             height:100vh;
@@ -73,7 +70,7 @@ export class Welcome extends HTMLElement {
          }
       
       `;
-      this.appendChild(style);
-   }
+    this.appendChild(style);
+  }
 }
-customElements.define("page-welcome", Welcome);
+customElements.define('page-welcome', Welcome);
