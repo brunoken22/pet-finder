@@ -211,9 +211,9 @@ app.get('/pets', async (req, res) => {
 });
 
 app.get('/pet-cerca-de', async (req, res) => {
-  const {lat, lng} = req.query;
+  const {lat, lng, email} = req.query;
 
-  const respuesta: any = await getAllPetCerca(lat, lng);
+  const respuesta: any = await getAllPetCerca(lat, lng, email);
   res.status(200).json([respuesta]);
 });
 app.post('/sendinblue', async (req, res) => {

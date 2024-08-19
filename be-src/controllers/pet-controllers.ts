@@ -105,16 +105,14 @@ export async function getAllPets() {
 
   return pet;
 }
-export async function getAllPetCerca(lat, lng) {
+export async function getAllPetCerca(lat, lng, email) {
   try {
     const hits = await index.search('', {
-      aroundLatLng: [lat, lng].join(','),
-      aroundRadius: 10000,
+      aroundLatLng: `${lat},${lng}`,
+      filters: `NOT email:${email}`,
     });
-
     return hits;
   } catch (e) {
-    console.log(e);
     return e.message;
   }
 }

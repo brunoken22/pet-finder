@@ -19,7 +19,7 @@ export async function sendinblue(data) {
   console.log('apiKey ' + apiKey);
 
   // Realiza la solicitud POST para enviar el correo electrónico
-  axios
+  return axios
     .post('https://api.brevo.com/v3/smtp/email', send, {
       headers: {
         'api-key': apiKey,

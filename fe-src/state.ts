@@ -116,11 +116,15 @@ const state = {
     return respuestaJSON;
   },
   async getPetCerca(lat, lng) {
-    const res = await fetch(Api_url + `/pet-cerca-de?lat=${lat}&lng=${lng}`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const res = await fetch(
+      Api_url +
+        `/pet-cerca-de?lat=${lat}&lng=${lng}&email=${this.getState().email}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     const data = await res.json();
 
     if (data[0]) {
@@ -152,7 +156,7 @@ const state = {
     });
   },
   async reportPet(data) {
-    const response = await fetch(Api_url + '/sendinblue/' + this.idTemp, {
+    await fetch(Api_url + '/sendinblue/' + this.idTemp, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
