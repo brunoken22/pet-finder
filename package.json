@@ -46,7 +46,7 @@
     "util": "^0.12.3"
   },
   "scripts": {
-    "dev:back": "nodemon --watch ./be-src/index.ts --exec ts-node ./be-src/dev.ts",
+    "dev:back": "nodemon --watch ./be-src --exec ts-node ./be-src/dev.ts",
     "dev": "parcel serve ./fe-src/index.html",
     "sync": "ts-node ./be-src/sync.ts",
     "build:front": "parcel build ./fe-src/index.html",

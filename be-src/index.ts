@@ -217,17 +217,21 @@ app.get('/pet-cerca-de', async (req, res) => {
   res.status(200).json([respuesta]);
 });
 app.post('/sendinblue', async (req, res) => {
-  if (!req.body) {
+  try {
+    if (!req.body) {
+      res.json({
+        message: 'Error',
+      });
+      return;
+    }
+    const send = await sendinblue(req.body);
     res.json({
-      message: 'Error',
+      send,
+      message: 'ok',
     });
-    return;
+  } catch (e: any) {
+    res.json(e.message);
   }
-  const send = await sendinblue(req.body);
-  res.json({
-    send,
-    message: 'ok',
-  });
 });
 app.use(express.static(ruta));
 app.get('*', function (req, res) {

@@ -16,8 +16,7 @@ export async function sendinblue(data) {
     htmlContent: content,
   };
 
-  // Realiza la solicitud POST para enviar el correo electrónico
-  return axios
+  return await axios
     .post('https://api.brevo.com/v3/smtp/email', send, {
       headers: {
         'api-key': apiKey,
@@ -25,8 +24,8 @@ export async function sendinblue(data) {
       },
     })
     .then((response) => {
-      console.log('Correo electrónico enviado:');
-      return response;
+      console.log('Correo electrónico enviado:', response.status);
+      return response.data;
     })
     .catch((error) => {
       console.error('Error al enviar el correo electrónico:', error);
