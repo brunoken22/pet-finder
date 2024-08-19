@@ -107,9 +107,10 @@ export async function getAllPets() {
 }
 export async function getAllPetCerca(lat, lng, email) {
   try {
+    const filter = email ? `NOT email:${email}` : '';
     const hits = await index.search('', {
       aroundLatLng: `${lat},${lng}`,
-      filters: `NOT email:${email}`,
+      filters: filter,
     });
     return hits;
   } catch (e) {
