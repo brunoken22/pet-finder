@@ -19,6 +19,7 @@ import {
   deletePet,
   getAllPetCerca,
 } from "./controllers/pet-controllers";
+import { SUCCESS } from "dropzone";
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -164,6 +165,7 @@ app.put("/pet/:id", async (req, res) => {
       algoliaRes,
     });
   } catch (e: any) {
+    console.error("ESTE ES EL ERROR: ", e);
     res.status(500).json({ message: e.message });
   }
 });
@@ -188,11 +190,22 @@ app.get("/pet/:id", async (req, res) => {
   const { id } = req.params;
   if (!id) {
     res.status(400).json({
-      message: "Me falta datos",
+      message: "Falta el id",
     });
+    return;
   }
   const pet = await getPet(id);
-  res.json({ pet });
+  if (!pet.dataValues.id) {
+    res.status(200).json({
+      success: false,
+      message: "No se encontro la mascota",
+    });
+    return;
+  }
+  res.status(200).json({
+    success: true,
+    pet,
+  });
 });
 //obetiene todo los pets
 app.get("/pets", async (req, res) => {

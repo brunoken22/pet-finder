@@ -1,7 +1,7 @@
-import {Pet} from '../models';
-import * as jwt from 'jsonwebtoken';
-import {index} from '../lib/algolia';
-import {cloudinary} from '../lib/cloudinary';
+import { Pet } from "../models";
+import * as jwt from "jsonwebtoken";
+import { index } from "../lib/algolia";
+import { cloudinary } from "../lib/cloudinary";
 const secrect = process.env.SECRECT;
 
 export async function createPet(data) {
@@ -17,7 +17,7 @@ export async function createPet(data) {
   });
 
   await index.saveObject({
-    objectID: pet.get('id'),
+    objectID: pet.get("id"),
     name: pet.dataValues.name,
     email: data.email,
     lugar: pet.dataValues.lugar,
@@ -41,6 +41,7 @@ export async function getPetToken(token) {
   return user;
 }
 export async function modPet(id: string, data) {
+  console.log(data, id);
   const imgSubida = await cloudinary.uploader.upload(data.img);
   function modifPet(pet, id?) {
     const respuesta: any = {};
@@ -58,7 +59,7 @@ export async function modPet(id: string, data) {
     }
     return respuesta;
   }
-  const newDataUpdate = {...data, img: imgSubida.url};
+  const newDataUpdate = { ...data, img: imgSubida.url };
   const actualizadoPet = await Pet.update(newDataUpdate, {
     where: {
       id: id,
@@ -83,22 +84,18 @@ export async function deletePet(id) {
     },
   });
   if (!petRes) {
-    return 'Mascota no existe';
+    return "Mascota no existe";
   }
   const algoliaRes = await index.deleteObject(id);
   return {
-    message: 'Todo Ok',
+    message: "Todo Ok",
     algoliaRes,
     petRes,
   };
 }
 export async function getPet(id) {
-  const user = await Pet.findAll({
-    where: {
-      UserId: id,
-    },
-  });
-  return user;
+  const pet = await Pet.findByPk(id);
+  return pet;
 }
 export async function getAllPets() {
   const pet = await Pet.findAll();
@@ -107,8 +104,8 @@ export async function getAllPets() {
 }
 export async function getAllPetCerca(lat, lng, email) {
   try {
-    const filter = email ? `NOT email:${email}` : '';
-    const hits = await index.search('', {
+    const filter = email ? `NOT email:${email}` : "";
+    const hits = await index.search("", {
       aroundLatLng: `${lat},${lng}`,
       filters: filter,
     });
