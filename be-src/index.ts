@@ -202,9 +202,14 @@ app.get("/pet/:id", async (req, res) => {
     });
     return;
   }
+  const modPet = {
+    ...pet.dataValues,
+    img: pet.dataValues.img.replace("http://", "https://"),
+  };
+
   res.status(200).json({
     success: true,
-    pet,
+    pet: modPet,
   });
 });
 //obetiene todo los pets

@@ -95,11 +95,7 @@ export async function deletePet(id) {
 }
 export async function getPet(id: string) {
   const pet = await Pet.findByPk(id);
-
-  return {
-    ...pet.dataValues,
-    img: pet.dataValues.img.replace("http://", "https://"),
-  };
+  return pet;
 }
 export async function getAllPets() {
   const pets = await Pet.findAll();
