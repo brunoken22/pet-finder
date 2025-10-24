@@ -97,7 +97,7 @@ export async function getPet(id: string) {
   const pet = await Pet.findByPk(id);
 
   return {
-    ...pet,
+    ...pet.dataValues,
     img: pet.dataValues.img.replace("http://", "https://"),
   };
 }
