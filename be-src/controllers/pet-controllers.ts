@@ -93,14 +93,18 @@ export async function deletePet(id) {
     petRes,
   };
 }
-export async function getPet(id) {
+export async function getPet(id: string) {
   const pet = await Pet.findByPk(id);
-  return pet;
+
+  return {
+    ...pet,
+    img: pet.dataValues.img.replace("http://", "https://"),
+  };
 }
 export async function getAllPets() {
-  const pet = await Pet.findAll();
+  const pets = await Pet.findAll();
 
-  return pet;
+  return pets;
 }
 export async function getAllPetCerca(lat, lng, email) {
   try {
