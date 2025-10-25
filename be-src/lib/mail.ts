@@ -138,7 +138,6 @@ export default function generateMail(
                                   >
                                     <strong>Información de contacto:</strong><br/>
                                     Nombre: ${nombre}<br/>
-                                    Email: ${email}<br/>
                                     Teléfono: ${tel}
                                   </p>
                                   <p
@@ -154,7 +153,7 @@ export default function generateMail(
                                     Por favor, contacta al interesado lo antes posible para coordinar los detalles.
                                   </p>
                                   <a
-                                    href="mailto:${email}"
+                                    href="tel:${tel}"
                                     style="
                                       line-height: 100%;
                                       text-decoration: none;
@@ -189,7 +188,7 @@ export default function generateMail(
                                         mso-padding-alt: 0px;
                                         mso-text-raise: 14.25px;
                                       "
-                                      >Responder al interesado</span
+                                      >Llamar a ${nombre}</span
                                     ><span
                                       ><!--[if mso
                                         ]><i style="mso-font-width: 500%" hidden
