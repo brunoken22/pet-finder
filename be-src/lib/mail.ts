@@ -111,7 +111,7 @@ export default function generateMail(
                                       margin-bottom: 16px;
                                     "
                                   >
-                                    Nueva solicitud para ${namePet}
+                                    Fue visto  ${namePet}
                                   </p>
                                   <p
                                     style="
