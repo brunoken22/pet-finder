@@ -3,7 +3,8 @@ export default function generateMail(
   tel: string,
   nombre: string,
   email: string,
-  namePet: string
+  namePet: string,
+  imgPet: string
 ) {
   return `
     <table
@@ -63,7 +64,7 @@ export default function generateMail(
                             <img
                               alt="Mascota"
                               height="96"
-                              src="https://pet-finder-angular.netlify.app/logo.webp"
+                              src=${imgPet || "https://pet-finder-angular.netlify.app/logo.webp"}
                               style="
                                 display: block;
                                 outline: none;

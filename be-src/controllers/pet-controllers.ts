@@ -41,7 +41,6 @@ export async function getPetToken(token) {
   return user;
 }
 export async function modPet(id: string, data) {
-  console.log(data, id);
   const imgSubida = await cloudinary.uploader.upload(data.img);
   function modifPet(pet, id?) {
     const respuesta: any = {};
