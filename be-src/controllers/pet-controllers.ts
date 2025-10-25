@@ -101,12 +101,14 @@ export async function getAllPets() {
 
   return pets;
 }
-export async function getAllPetCerca(lat, lng, email) {
+export async function getAllPetCerca(lat: string, lng: string, email?: string, range?: string) {
   try {
+    const rangeFilter = Number(range) > 10000 ? "all" : Number(range);
     const filter = email ? `NOT email:${email}` : "";
     const hits = await index.search("", {
-      aroundLatLng: `${lat},${lng}`,
+      aroundLatLng: `${Number(lat)},${Number(lng)}`,
       filters: filter,
+      aroundRadius: rangeFilter,
     });
     return hits;
   } catch (e) {

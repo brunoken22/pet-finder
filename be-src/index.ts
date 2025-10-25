@@ -20,6 +20,7 @@ import {
   getAllPetCerca,
 } from "./controllers/pet-controllers";
 import { SUCCESS } from "dropzone";
+import { json } from "sequelize";
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -223,9 +224,21 @@ app.get("/pets", async (req, res) => {
 });
 
 app.get("/pet-cerca-de", async (req, res) => {
-  const { lat, lng, email } = req.query;
+  const { lat, lng, email, range } = req.query;
+  if (!lat || !lng) {
+    res.status(400),
+      json({
+        success: false,
+        message: "Se necesita latitude como longitud",
+      });
+    return;
+  }
+  const latitude: string = Array.isArray(lat) ? (lat[0] as string) : (lat as string);
+  const longitude: string = Array.isArray(lng) ? (lng[0] as string) : (lng as string);
+  const mailParse: string = Array.isArray(email) ? (email[0] as string) : (email as string);
+  const rangeParse: string = Array.isArray(range) ? (range[0] as string) : (range as string);
 
-  const respuesta: any = await getAllPetCerca(lat, lng, email);
+  const respuesta = await getAllPetCerca(latitude, longitude, mailParse, rangeParse || "0");
   res.status(200).json([respuesta]);
 });
 app.post("/sendinblue", async (req, res) => {
