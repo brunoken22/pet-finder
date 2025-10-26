@@ -101,9 +101,16 @@ export async function getAllPets() {
 
   return pets;
 }
-export async function getAllPetCerca(lat: string, lng: string, email?: string, range?: string) {
+export async function getAllPetCerca(
+  lat: string,
+  lng: string,
+  email?: string,
+  range: string = "1000"
+) {
   try {
-    const rangeFilter = Number(range) > 10000 ? "all" : Number(range);
+    const rangeFilter =
+      Number(range) >= 1 ? (Number(range) >= 10000 ? "all" : Number(range)) : 1000;
+    console.log("UBICACION", range, rangeFilter);
     const filter = email ? `NOT email:${email}` : "";
     const hits = await index.search("", {
       aroundLatLng: `${Number(lat)},${Number(lng)}`,
