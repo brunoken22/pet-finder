@@ -19,7 +19,6 @@ import {
   deletePet,
   getAllPetCerca,
 } from "./controllers/pet-controllers";
-import { SUCCESS } from "dropzone";
 import { json } from "sequelize";
 
 const port = process.env.PORT || 3000;
@@ -76,7 +75,7 @@ app.post("/auth/token", async (req, res) => {
     });
     return auth;
   } else {
-    res.json({ message: "Email o password incorrecto", success: false });
+    res.json({ message: "Email o contraseña incorrecto", success: false });
   }
 });
 // async function authMiddleeware(req, res, next) {
