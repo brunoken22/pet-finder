@@ -76,7 +76,7 @@ app.post("/auth/token", async (req, res) => {
     });
     return auth;
   } else {
-    res.json({ message: "Incorreto", success: false });
+    res.json({ message: "Email o password incorrecto", success: false });
   }
 });
 // async function authMiddleeware(req, res, next) {
